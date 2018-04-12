@@ -2,7 +2,10 @@
 machine:
     timezone:
         America/Denver # Set the timezone
-
+        
+    node:
+      version: v8.10.0
+   
     environment:
         XCODE_WORKSPACE: "platforms/ios/barcode-test.xcworkspace"
         GYM_CODE_SIGNING_IDENTITY: "iPhone Distribution: BrieBug Software, Inc. (4CS6W5LV48)"
@@ -13,7 +16,7 @@ machine:
 ## Customize dependencies
 dependencies:
     pre:
-        - npm install -g typescript ionic cordova@6.4.0 ios-deploy ios-sim
+        - npm install -g typescript ionic cordova ios-deploy ios-sim
         ##- gem update fastlane
 
     post:
