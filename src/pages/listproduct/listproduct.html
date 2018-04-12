@@ -1,0 +1,31 @@
+
+<ion-header>
+
+  <ion-navbar>
+  	 <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title><p>Products</p>
+       <ion-icon class ="refresh" name="refresh"  (click)="refreshPage()" end ></ion-icon>
+    </ion-title>
+    
+  </ion-navbar>
+
+</ion-header>
+		
+
+<ion-content padding>
+	<div *ngFor="let show of AppkitProducts?.resultpro; let i = index ;">
+    <div class="content">
+      <h1>{{i+1}} {{show?.title}}</h1>
+      <p><img src="{{show?.featured_image_url}}"></p>
+      <p class="button-detail"><span (click)="detailProduct(show.id);">Detail of {{show.title}}</span></p>
+    </div>
+  </div>
+
+</ion-content>
+ <ion-footer>
+  <ion-toolbar>
+    <ion-title> <p [innerHTML]=" AppkitProducts?.metadata?.app_footer_content"></p> </ion-title>
+  </ion-toolbar>
+</ion-footer>
