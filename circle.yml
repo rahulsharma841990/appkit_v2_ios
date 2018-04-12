@@ -1,39 +1,34 @@
-## Setup machine
-general:
-    artifacts:
-        - /home/ubuntu/AndroidCI/app/build/outputs/apk/
+## Customize the test machine
 machine:
-  java:
-    version: 'oraclejdk8'
-  node:
-    version: v7.0.0
-  environment:
-    ANDROID_HOME: /usr/local/android-sdk-linux
+    timezone:
+        America/Denver # Set the timezone
 
+    environment:
+        XCODE_WORKSPACE: "platforms/ios/barcode-test.xcworkspace"
+        GYM_CODE_SIGNING_IDENTITY: "iPhone Distribution: BrieBug Software, Inc. (4CS6W5LV48)"
 
-## Setup dependencies
+    xcode:
+        version: 8.0
+
+## Customize dependencies
 dependencies:
-  pre:
-    - npm install -g ionic cordova
-    - echo y | android update sdk --no-ui --all --filter tools,platform-tools,extra-google-m2repository,extra-google-google_play_services,extra-android-support,extra-android-m2repository,android-25
-    - echo y | android update sdk --no-ui --all --filter build-tools-25.0.0
-    - echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;26.0.2"
-    - echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;25.0.0"
+    pre:
+        - npm install -g typescript ionic cordova@6.4.0 ios-deploy ios-sim
+        ##- gem update fastlane
 
-  cache_directories:
-    - /usr/local/android-sdk-linux/tools
-    - /usr/local/android-sdk-linux/build-tools/24.0.1
+    post:
+        - mkdir www
+        - ionic platform add ios
 
-  post:
-    - mkdir www
-    - rm -rf node_modules
-    - ionic cordova platform add android -Y --noresources
-
+## customize test commands
 test:
-  pre:
-    - npm install
-    - npm rebuild node-sass
-
-  override:
-    - ionic cordova build android -Y --noresources
-    - cp -r platforms/android/app/build/outputs/apk $CIRCLE_ARTIFACTS
+    override:
+        - echo 'No tests to run'
+deployment:
+    beta_distribution:
+        #branch: 'develop'
+        commands:
+            - ionic build ios --release
+            ##- ruby fastlane/select_xcode_signing_method.rb -p platforms/ios/barcode-test.xcodeproj -t barcode-test -m 'Manual' -b $CIRCLE_BUILD_NUM -i platforms/ios/barcode-test/barcode-test-Info.plist
+            ##- fastlane ios beta
+            - cp -R ./dist $CIRCLE_ARTIFACTS
